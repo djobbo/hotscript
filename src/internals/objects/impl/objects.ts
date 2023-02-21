@@ -141,7 +141,8 @@ export type AllPaths<T, ParentPath extends string = never> = T extends Primitive
         | AllPaths<T[key], JoinPath<ParentPath, key, ".">>
     : never
   : ParentPath;
-  export type RequiredImpl<
+
+export type RequiredImpl<
   obj,
   keys extends keyof obj,
   union = obj & Required<Pick<obj, keys>>
