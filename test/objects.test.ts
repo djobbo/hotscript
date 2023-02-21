@@ -392,6 +392,56 @@ describe("Objects", () => {
     });
   });
 
+  it("Required", () => {
+    type res1 = Call<
+      //   ^?
+      Objects.Required,
+      { a?: 1; b: true }
+    >;
+    type tes1 = Expect<Equal<res1, { a: 1; b: true }>>;
+
+    type res2 = Apply<
+      //   ^?
+      Objects.Required,
+      [{ a: 1; b?: true; c?: "cc" }, "a" | "c"]
+    >;
+    type tes2 = Expect<Equal<res2, { a: 1; b?: true; c: "cc" }>>;
+
+    type res3 = Apply<
+      //   ^?
+      Objects.Required,
+      [{ a?: 1; b: true | undefined; c?: "cc" | undefined; d?: null }]
+    >;
+    type tes3 = Expect<
+      Equal<res3, { a: 1; b: true | undefined; c: "cc"; d: null }>
+    >;
+  });
+
+  it("Partial", () => {
+    type res1 = Call<
+      //   ^?
+      Objects.Partial,
+      { a?: 1; b: true }
+    >;
+    type tes1 = Expect<Equal<res1, { a?: 1; b?: true }>>;
+
+    type res2 = Apply<
+      //   ^?
+      Objects.Partial,
+      [{ a?: 1; b: true; c: "cc" }, "a" | "c"]
+    >;
+    type tes2 = Expect<Equal<res2, { a?: 1; b: true; c?: "cc" }>>;
+
+    type res3 = Apply<
+      //   ^?
+      Objects.Partial,
+      [{ a: 1; b?: true | undefined; c: "cc" | undefined; d: null }]
+    >;
+    type tes3 = Expect<
+      Equal<res3, { a?: 1; b?: true | undefined; c?: "cc"; d?: null }>
+    >;
+  });
+
   it("Record", () => {
     type res1 = Call<
       //   ^?

@@ -3,6 +3,7 @@ import { Call, Call2, Fn, PartialApply, unset, _ } from "../core/Core";
 import { Std } from "../std/Std";
 import { Strings } from "../strings/Strings";
 import * as Impl from "./impl/objects";
+import { Functions } from "../functions/Functions";
 
 export namespace Objects {
   export interface FromEntries extends Fn {
@@ -194,6 +195,20 @@ export namespace Objects {
     arg2 = unset,
     arg3 = unset
   > = PartialApply<CreateFn, [pattern, arg0, arg1, arg2, arg3]>;
+
+  export interface Required extends Fn {
+    return: Impl.RequiredImpl<
+      this["arg0"],
+      this["arg1"] extends unset ? keyof this["arg0"] : this["arg1"]
+    >;
+  }
+
+  export interface Partial extends Fn {
+    return: Impl.PartialImpl<
+      this["arg0"],
+      this["arg1"] extends unset ? keyof this["arg0"] : this["arg1"]
+    >;
+  }
 
   interface RecordFn extends Fn {
     return: this["args"] extends [infer union extends string, infer value]
