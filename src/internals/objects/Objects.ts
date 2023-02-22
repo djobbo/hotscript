@@ -176,6 +176,19 @@ export namespace Objects {
     >;
   }
 
+  /**
+   * Make all properties (or a specific set) of a record required
+   * @description This function is used to make properties of a record required
+   * @param obj - The record to make properties required
+   * @param keys - The keys to make required, if not specified, all properties will be made mutable
+   * @returns The record with the specified properties made required
+   *
+   * @example
+   * ```ts
+   * type T0 = Call<O.Required, { a?: 1, b?: 2, c: 3 }>; // { a: 1, b: 2, c: 3 }
+   * type T1 = Call<O.Required<'a' | 'c'>, { a?: 1, b?: 2, c?: 3 }>; // { a: 1, b?: 2, c: 3 }
+   * ```
+   */
   export type Required<
     keys extends string | number | symbol | unset = unset,
     obj = unset
@@ -185,6 +198,25 @@ export namespace Objects {
     return: Impl.RequiredBy<this["arg0"], this["arg1"]>;
   }
 
+    /**
+   * Make properties following a pattern required
+   * @description This function is used to make properties of a record required, following a pattern
+   * @param obj - The record to make properties required
+   * @param fn - The function to use to determine which properties to make required
+   * @returns The record with the specified properties made required
+   *
+   * @example
+   * ```ts
+   * type T0 = Call<O.RequiredBy<Booleans.Equals<1>>, { a?: 1, b?: 2, c: 3 }>; // { a: 1, b?: 2, c?: 3 }
+   * 
+   * // Using a custom function
+   * interface ShouldBeRequired extends Fn {
+   *   return: Call<Strings.StartsWith<"__">, this["arg1"]>;
+   * 
+   * }
+   * type T1 = Call<O.RequiredBy<ShouldBeRequired>, { __id?: 1, title?: 'HOTScript', desc?: 'HOT' }>; // { __id: 1, title?: 'HOTScript', desc?: 'HOT' }
+   * ```
+   */
   export type RequiredBy<fn extends Fn, obj = unset> = PartialApply<
     RequiredByFn,
     [obj, fn]
@@ -197,6 +229,19 @@ export namespace Objects {
     >;
   }
 
+    /**
+   * Make all properties (or a specific set) of a record optional
+   * @description This function is used to make properties of a record optional
+   * @param obj - The record to make properties optional
+   * @param keys - The keys to make optional, if not specified, all properties will be made mutable
+   * @returns The record with the specified properties made optional
+   *
+   * @example
+   * ```ts
+   * type T0 = Call<O.Partial, { a?: 1, b?: 2, c: 3 }>; // { a?: 1, b?: 2, c?: 3 }
+   * type T1 = Call<O.Partial<'a' | 'c'>, { a?: 1, b: 2, c: 3 }>; // { a?: 1, b: 2, c?: 3 }
+   * ```
+   */
   export type Partial<
     keys extends string | number | symbol | unset = unset,
     obj = unset
@@ -206,6 +251,25 @@ export namespace Objects {
     return: Impl.PartialBy<this["arg0"], this["arg1"]>;
   }
 
+      /**
+   * Make properties following a pattern optional
+   * @description This function is used to make properties of a record optional, following a pattern
+   * @param obj - The record to make properties optional
+   * @param fn - The function to use to determine which properties to make optional
+   * @returns The record with the specified properties made optional
+   *
+   * @example
+   * ```ts
+   * type T0 = Call<O.PartialBy<Booleans.Equals<1>>, { a: 1, b: 2, c: 3 }>; // { a?: 1, b: 2, c: 3 }
+   * 
+   * // Using a custom function
+   * interface ShouldBeOptional extends Fn {
+   *   return: Call<Strings.StartsWith<"__">, this["arg1"]>;
+   * 
+   * }
+   * type T1 = Call<O.PartialBy<ShouldBeOptional>, { __id: 1, title: 'HOTScript', __desc: 'HOT' }>; // { __id?: 1, title: 'HOTScript', __desc?: 'HOT' }
+   * ```
+   */
   export type PartialBy<fn extends Fn, obj = unset> = PartialApply<
     PartialByFn,
     [obj, fn]
