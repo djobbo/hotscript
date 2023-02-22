@@ -198,7 +198,7 @@ export namespace Objects {
     return: Impl.RequiredBy<this["arg0"], this["arg1"]>;
   }
 
-    /**
+  /**
    * Make properties following a pattern required
    * @description This function is used to make properties of a record required, following a pattern
    * @param obj - The record to make properties required
@@ -208,11 +208,11 @@ export namespace Objects {
    * @example
    * ```ts
    * type T0 = Call<O.RequiredBy<Booleans.Equals<1>>, { a?: 1, b?: 2, c: 3 }>; // { a: 1, b?: 2, c?: 3 }
-   * 
+   *
    * // Using a custom function
    * interface ShouldBeRequired extends Fn {
    *   return: Call<Strings.StartsWith<"__">, this["arg1"]>;
-   * 
+   *
    * }
    * type T1 = Call<O.RequiredBy<ShouldBeRequired>, { __id?: 1, title?: 'HOTScript', desc?: 'HOT' }>; // { __id: 1, title?: 'HOTScript', desc?: 'HOT' }
    * ```
@@ -229,7 +229,7 @@ export namespace Objects {
     >;
   }
 
-    /**
+  /**
    * Make all properties (or a specific set) of a record optional
    * @description This function is used to make properties of a record optional
    * @param obj - The record to make properties optional
@@ -251,7 +251,7 @@ export namespace Objects {
     return: Impl.PartialBy<this["arg0"], this["arg1"]>;
   }
 
-      /**
+  /**
    * Make properties following a pattern optional
    * @description This function is used to make properties of a record optional, following a pattern
    * @param obj - The record to make properties optional
@@ -261,11 +261,11 @@ export namespace Objects {
    * @example
    * ```ts
    * type T0 = Call<O.PartialBy<Booleans.Equals<1>>, { a: 1, b: 2, c: 3 }>; // { a?: 1, b: 2, c: 3 }
-   * 
+   *
    * // Using a custom function
    * interface ShouldBeOptional extends Fn {
    *   return: Call<Strings.StartsWith<"__">, this["arg1"]>;
-   * 
+   *
    * }
    * type T1 = Call<O.PartialBy<ShouldBeOptional>, { __id: 1, title: 'HOTScript', __desc: 'HOT' }>; // { __id?: 1, title: 'HOTScript', __desc?: 'HOT' }
    * ```
