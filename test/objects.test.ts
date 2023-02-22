@@ -417,6 +417,15 @@ describe("Objects", () => {
     >;
   });
 
+  it("RequiredBy", () => {
+    type res1 = Call<
+      //   ^?
+      Objects.RequiredBy<Strings.StartsWith<"h">>,
+      { a?: 'hi'; b: 'hello', c?: 'bye' }>
+
+      type tes1 = Expect<Equal<res1, { a: 'hi'; b: 'hello', c?: 'bye' }>>;
+  })
+
   it("Partial", () => {
     type res1 = Call<
       //   ^?
@@ -441,6 +450,15 @@ describe("Objects", () => {
       Equal<res3, { a?: 1; b?: true | undefined; c?: "cc"; d?: null }>
     >;
   });
+
+  it("PartialBy", () => {
+    type res1 = Call<
+      //   ^?
+      Objects.PartialBy<Strings.StartsWith<"h">>,
+      { a: 'hi'; b?: 'hello', c?: 'bye' }>
+
+      type tes1 = Expect<Equal<res1, { a?: 'hi'; b?: 'hello', c: 'bye' }>>;
+  })
 
   it("Record", () => {
     type res1 = Call<
