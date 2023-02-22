@@ -8,4 +8,6 @@ export namespace Std {
   export type _Capitalize<a extends string> = Capitalize<a>;
   export type _Uncapitalize<a extends string> = Uncapitalize<a>;
   export type _Record<k extends PropertyKey, v> = Record<k, v>;
+  export type _Partial<a> = Partial<a>;
+  export type _Required<a> = Required<a>;
 }

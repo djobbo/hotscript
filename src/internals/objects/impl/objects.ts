@@ -1,4 +1,4 @@
-import { Apply, Call, Fn } from "../../core/Core";
+import { Apply, Call, Call2, Fn } from "../../core/Core";
 import { Strings } from "../../strings/Strings";
 import { Equal, Prettify, Primitive, UnionToIntersection } from "../../helpers";
 import { Std } from "../../std/Std";
@@ -46,6 +46,28 @@ type GroupByImplRec<xs, fn extends Fn, acc = {}> = xs extends [
   : acc;
 
 export type GroupBy<xs, fn extends Fn> = Prettify<GroupByImplRec<xs, fn>>;
+
+type OmitEntries<
+  entries extends [PropertyKey, any],
+  fn extends Fn
+> = entries extends any
+  ? Call2<fn, entries[1], entries[0]> extends true
+    ? never
+    : entries
+  : never;
+
+export type OmitBy<T, fn extends Fn> = FromEntries<OmitEntries<Entries<T>, fn>>;
+
+type PickEntries<
+  entries extends [PropertyKey, any],
+  fn extends Fn
+> = entries extends any
+  ? Call2<fn, entries[1], entries[0]> extends true
+    ? entries
+    : never
+  : never;
+
+export type PickBy<T, fn extends Fn> = FromEntries<PickEntries<Entries<T>, fn>>;
 
 export type Assign<xs extends readonly any[]> = Prettify<
   UnionToIntersection<xs[number]>
@@ -142,18 +164,34 @@ export type AllPaths<T, ParentPath extends string = never> = T extends Primitive
     : never
   : ParentPath;
 
-export type RequiredImpl<
+export type Required<
   obj,
-  keys extends keyof obj,
-  union = obj & Required<Pick<obj, keys>>
+  keys extends keyof obj = keyof obj,
+  union = obj & Std._Required<Pick<obj, keys>>
 > = {
   [key in keyof union]: union[key];
 };
 
-export type PartialImpl<
+export type RequiredBy<
+  obj,
+  fn extends Fn,
+  union = OmitBy<obj, fn> & Std._Required<PickBy<obj, fn>>
+> = {
+  [key in keyof union]: union[key];
+};
+
+export type Partial<
   obj,
   keys extends keyof obj,
-  union = Omit<obj, keys> & Partial<Pick<obj, keys>>
+  union = Omit<obj, keys> & Std._Partial<Pick<obj, keys>>
+> = {
+  [key in keyof union]: union[key];
+};
+
+export type PartialBy<
+  obj,
+  fn extends Fn,
+  union = OmitBy<obj, fn> & Std._Partial<PickBy<obj, fn>>
 > = {
   [key in keyof union]: union[key];
 };

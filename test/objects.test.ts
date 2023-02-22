@@ -425,17 +425,17 @@ describe("Objects", () => {
     >;
     type tes1 = Expect<Equal<res1, { a?: 1; b?: true }>>;
 
-    type res2 = Apply<
+    type res2 = Call<
       //   ^?
-      Objects.Partial,
-      [{ a?: 1; b: true; c: "cc" }, "a" | "c"]
+      Objects.Partial<"a" | "c">,
+      { a?: 1; b: true; c: "cc" }
     >;
     type tes2 = Expect<Equal<res2, { a?: 1; b: true; c?: "cc" }>>;
 
-    type res3 = Apply<
+    type res3 = Call<
       //   ^?
       Objects.Partial,
-      [{ a: 1; b?: true | undefined; c: "cc" | undefined; d: null }]
+      { a: 1; b?: true | undefined; c: "cc" | undefined; d: null }
     >;
     type tes3 = Expect<
       Equal<res3, { a?: 1; b?: true | undefined; c?: "cc"; d?: null }>

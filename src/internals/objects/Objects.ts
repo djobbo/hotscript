@@ -3,7 +3,6 @@ import { Call, Call2, Fn, PartialApply, unset, _ } from "../core/Core";
 import { Std } from "../std/Std";
 import { Strings } from "../strings/Strings";
 import * as Impl from "./impl/objects";
-import { Functions } from "../functions/Functions";
 
 export namespace Objects {
   export interface FromEntries extends Fn {
@@ -88,38 +87,12 @@ export namespace Objects {
     return: OmitImpl<this["arg1"], this["arg0"]>;
   }
 
-  type PickEntriesImpl<
-    entries extends [PropertyKey, any],
-    fn extends Fn
-  > = entries extends any
-    ? Call2<fn, entries[1], entries[0]> extends true
-      ? entries
-      : never
-    : never;
-
-  type PickByImpl<T, fn extends Fn> = Impl.FromEntries<
-    PickEntriesImpl<Impl.Entries<T>, fn>
-  >;
-
   export interface PickBy<fn extends Fn> extends Fn {
-    return: PickByImpl<this["arg0"], fn>;
+    return: Impl.PickBy<this["arg0"], fn>;
   }
 
-  type OmitEntriesImpl<
-    entries extends [PropertyKey, any],
-    fn extends Fn
-  > = entries extends any
-    ? Call2<fn, entries[1], entries[0]> extends true
-      ? never
-      : entries
-    : never;
-
-  type OmitByImpl<T, fn extends Fn> = Impl.FromEntries<
-    OmitEntriesImpl<Impl.Entries<T>, fn>
-  >;
-
   export interface OmitBy<fn extends Fn> extends Fn {
-    return: OmitByImpl<this["arg0"], fn>;
+    return: Impl.OmitBy<this["arg0"], fn>;
   }
 
   export type Assign<
@@ -196,19 +169,47 @@ export namespace Objects {
     arg3 = unset
   > = PartialApply<CreateFn, [pattern, arg0, arg1, arg2, arg3]>;
 
-  export interface Required extends Fn {
-    return: Impl.RequiredImpl<
+  export interface RequiredFn extends Fn {
+    return: Impl.Required<
       this["arg0"],
       this["arg1"] extends unset ? keyof this["arg0"] : this["arg1"]
     >;
   }
 
-  export interface Partial extends Fn {
-    return: Impl.PartialImpl<
+  export type Required<
+    keys extends string | number | symbol | unset = unset,
+    obj = unset
+  > = PartialApply<RequiredFn, [keys, obj]>;
+
+  export interface RequiredByFn extends Fn {
+    return: Impl.RequiredBy<this["arg0"], this["arg1"]>;
+  }
+
+  export type RequiredBy<fn extends Fn, obj = unset> = PartialApply<
+    RequiredByFn,
+    [obj, fn]
+  >;
+
+  export interface PartialFn extends Fn {
+    return: Impl.Partial<
       this["arg0"],
       this["arg1"] extends unset ? keyof this["arg0"] : this["arg1"]
     >;
   }
+
+  export type Partial<
+    keys extends string | number | symbol | unset = unset,
+    obj = unset
+  > = PartialApply<PartialFn, [obj, keys]>;
+
+  export interface PartialByFn extends Fn {
+    return: Impl.PartialBy<this["arg0"], this["arg1"]>;
+  }
+
+  export type PartialBy<fn extends Fn, obj = unset> = PartialApply<
+    PartialByFn,
+    [obj, fn]
+  >;
 
   interface RecordFn extends Fn {
     return: this["args"] extends [infer union extends string, infer value]
