@@ -27,6 +27,7 @@ export namespace Functions {
   export interface ParameterFn extends Fn {
     return: ParametersImpl<this["arg0"]>[this["arg1"]];
   }
+
   /**
    * Returns the Nth parameter of a function.
    *
@@ -39,6 +40,7 @@ export namespace Functions {
    * type T0 = Call<Parameter<1>, (a: number, b: string) => void>; // number
    * type T1 = Call2<Parameter, (a: number, b: string) => void, 1>; // string
    * type T2 = Eval<Parameter<(a: number, b: string) => void, 0>>; // number
+   * ```
    */
   export type Parameter<
     N extends number | _ | unset = unset,

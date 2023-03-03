@@ -1,11 +1,13 @@
 import { Booleans } from "../src/internals/booleans/Booleans";
 import {
   Apply,
+  Arg,
   arg0,
   arg1,
   arg2,
   arg3,
   Call,
+  Compose,
   ComposeLeft,
   Constant,
   Eval,
@@ -20,6 +22,7 @@ import { Tuples } from "../src/internals/tuples/Tuples";
 import { Equal, Expect } from "../src/internals/helpers";
 import { Match } from "../src/internals/match/Match";
 import { Numbers } from "../src/internals/numbers/Numbers";
+import { Unions } from "../src";
 
 describe("Objects", () => {
   describe("Create", () => {
@@ -420,11 +423,27 @@ describe("Objects", () => {
   it("RequiredBy", () => {
     type res1 = Call<
       //   ^?
-      Objects.RequiredBy<Strings.StartsWith<"h">>,
-      { a?: 'hi'; b: 'hello', c?: 'bye' }>
+      Objects.RequiredBy<Booleans.Extends<"hi" | "hello">>,
+      { a?: "hi"; b: "hello"; c?: "bye" }
+    >;
 
-      type tes1 = Expect<Equal<res1, { a: 'hi'; b: 'hello', c?: 'bye' }>>;
-  })
+    type tes1 = Expect<Equal<res1, { a: "hi" | undefined; b: "hello"; c?: "bye" }>>;
+
+    interface Tes2ShouldBeOptional extends Fn {
+      return: Call<Strings.StartsWith<"__">, this["arg1"]>;
+    }
+
+    type res2 = Call<
+      //   ^?
+      Objects.RequiredBy<
+        ComposeLeft<
+          [Arg<1>, Strings.StartsWith<"__">]
+        >
+      >,
+      { __a: "hi"; __b?: "hello"; c: "bye" }
+    >;
+    type tes2 = Expect<Equal<res2, { __a?: "hi"; __b?: "hello"; c: "bye" }>>;
+  });
 
   it("Partial", () => {
     type res1 = Call<
@@ -454,11 +473,27 @@ describe("Objects", () => {
   it("PartialBy", () => {
     type res1 = Call<
       //   ^?
-      Objects.PartialBy<Strings.StartsWith<"h">>,
-      { a: 'hi'; b?: 'hello', c?: 'bye' }>
+      Objects.PartialBy<Booleans.Extends<"hi" | "hello">>,
+      { a: "hi"; b: "hello"; c: "bye" }
+    >;
 
-      type tes1 = Expect<Equal<res1, { a?: 'hi'; b?: 'hello', c: 'bye' }>>;
-  })
+    type tes1 = Expect<Equal<res1, { a?: "hi"; b?: "hello"; c: "bye" }>>;
+
+    interface Tes2ShouldBeOptional extends Fn {
+      return: Call<Strings.StartsWith<"__">, this["arg1"]>;
+    }
+
+    type res2 = Call<
+      //   ^?
+      Objects.PartialBy<
+        ComposeLeft<
+          [Arg<1>, Strings.StartsWith<"__">]
+        >
+      >,
+      { __a: "hi"; __b?: "hello"; c: "bye" }
+    >;
+    type tes2 = Expect<Equal<res2, { __a?: "hi"; __b?: "hello"; c: "bye" }>>;
+  });
 
   it("Record", () => {
     type res1 = Call<

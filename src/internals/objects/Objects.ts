@@ -212,7 +212,6 @@ export namespace Objects {
    * // Using a custom function
    * interface ShouldBeRequired extends Fn {
    *   return: Call<Strings.StartsWith<"__">, this["arg1"]>;
-   *
    * }
    * type T1 = Call<O.RequiredBy<ShouldBeRequired>, { __id?: 1, title?: 'HOTScript', desc?: 'HOT' }>; // { __id: 1, title?: 'HOTScript', desc?: 'HOT' }
    * ```
@@ -260,14 +259,11 @@ export namespace Objects {
    *
    * @example
    * ```ts
+   * // Filter values
    * type T0 = Call<O.PartialBy<Booleans.Equals<1>>, { a: 1, b: 2, c: 3 }>; // { a?: 1, b: 2, c: 3 }
    *
-   * // Using a custom function
-   * interface ShouldBeOptional extends Fn {
-   *   return: Call<Strings.StartsWith<"__">, this["arg1"]>;
-   *
-   * }
-   * type T1 = Call<O.PartialBy<ShouldBeOptional>, { __id: 1, title: 'HOTScript', __desc: 'HOT' }>; // { __id?: 1, title: 'HOTScript', __desc?: 'HOT' }
+   * // Filter keys
+   * type T1 = Call<O.PartialBy<ComposeLeft<[Arg<1>, Strings.StartsWith<"__">]>>, { __id: 1, title: 'HOTScript', __desc: 'HOT' }>; // { __a?: "hi"; __b?: "hello"; c: "bye" }
    * ```
    */
   export type PartialBy<fn extends Fn, obj = unset> = PartialApply<

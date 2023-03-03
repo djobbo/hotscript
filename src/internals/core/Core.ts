@@ -209,6 +209,17 @@ export interface Identity extends Fn {
   return: this["arg0"];
 }
 
+
+/**
+ * Returns the the function's Nth argument.
+ *
+ * @param arg0 - Index of the argument to return.
+ * @returns The Nth argument of the function.
+ */
+export interface Arg<T extends 0 | 1 | 2 | 3> extends Fn {
+  return: this[`arg${T}`];
+}
+
 /**
  * A function that returns it's generic parameter.
  *
